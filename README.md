@@ -269,3 +269,4 @@ az group delete --name MyResourceGroup --yes --no-wait
 ## More tutorials
 - https://medium.com/swlh/how-to-deploy-an-asp-net-application-with-kubernetes-3c00c5fa1c6e
 - https://cloudblogs.microsoft.com/opensource/2018/11/27/tutorial-azure-devops-setup-cicd-pipeline-kubernetes-docker-helm/
+- https://docs.microsoft.com/en-us/azure/devops/pipelines/apps/cd/deploy-aks
