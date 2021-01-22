@@ -160,7 +160,7 @@ The Kubernetes load balancer service is created for the NGINX ingress controller
 
 ## Helm Chart example
 
-```console
+```
 git clone https://github.com/Azure/dev-spaces
 cd dev-spaces/samples/nodejs/getting-started/webfrontend
 ```
@@ -265,3 +265,7 @@ When the cluster is no longer needed, use the [az group delete][az-group-delete]
 ```
 az group delete --name MyResourceGroup --yes --no-wait
 ```
+
+## More tutorials
+- https://medium.com/swlh/how-to-deploy-an-asp-net-application-with-kubernetes-3c00c5fa1c6e
+- https://cloudblogs.microsoft.com/opensource/2018/11/27/tutorial-azure-devops-setup-cicd-pipeline-kubernetes-docker-helm/
