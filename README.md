@@ -156,3 +156,112 @@ The most important part of this file is from line 15 ~ 22. We route the traffic 
 The Kubernetes load balancer service is created for the NGINX ingress controller, we can access our app with the assigned dynamic public IP address.
 
 `kubectl --namespace ingress-basic get services -o wide -w nginx-ingress-ingress-nginx-controller`
+
+
+### Helm Chart example
+
+```console
+git clone https://github.com/Azure/dev-spaces
+cd dev-spaces/samples/nodejs/getting-started/webfrontend
+```
+
+## Create a Dockerfile
+
+Create a new *Dockerfile* file using the following:
+
+```dockerfile
+FROM node:latest
+
+WORKDIR /webfrontend
+
+COPY package.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 80
+CMD ["node","server.js"]
+```
+
+## Build and push the sample application to the ACR
+
+Use the [az acr build][az-acr-build] command to build and push an image to the registry, using the preceding Dockerfile. The `.` at the end of the command sets the location of the Dockerfile, in this case the current directory.
+
+```azurecli
+az acr build --image webfrontend:v1 \
+  --registry azure-workshop \
+  --file Dockerfile .
+```
+
+## Create your Helm chart
+
+Generate your Helm chart using the `helm create` command.
+
+```console
+helm create webfrontend
+```
+
+Make the following updates to *webfrontend/values.yaml*. Substitute the loginServer of your registry that you noted in an earlier step, such as *myhelmacr.azurecr.io*:
+
+* Change `image.repository` to `<loginServer>/webfrontend`
+* Change `service.type` to `LoadBalancer`
+
+For example:
+
+```yml
+# Default values for webfrontend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: myhelmacr.azurecr.io/webfrontend
+  pullPolicy: IfNotPresent
+...
+service:
+  type: LoadBalancer
+  port: 80
+...
+```
+
+Update `appVersion` to `v1` in *webfrontend/Chart.yaml*. For example
+
+```yml
+apiVersion: v2
+name: webfrontend
+...
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application.
+appVersion: v1
+```
+
+## Run your Helm chart
+
+Use the `helm install` command to install your application using your Helm chart.
+
+```console
+helm install webfrontend webfrontend/
+```
+
+It takes a few minutes for the service to return a public IP address. To monitor the progress, use the `kubectl get service` command with the *watch* parameter:
+
+```console
+$ kubectl get service --watch
+
+NAME                TYPE          CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+webfrontend         LoadBalancer  10.0.141.72   <pending>     80:32150/TCP   2m
+...
+webfrontend         LoadBalancer  10.0.141.72   <EXTERNAL-IP> 80:32150/TCP   7m
+```
+
+Navigate to the load balancer of your application in a browser using the `<EXTERNAL-IP>` to see the sample application.
+
+## Delete the cluster
+
+When the cluster is no longer needed, use the [az group delete][az-group-delete] command to remove the resource group, the AKS cluster, the container registry, the container images stored there, and all related resources.
+
+```azurecli-interactive
+az group delete --name MyResourceGroup --yes --no-wait
+```
