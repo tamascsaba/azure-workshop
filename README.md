@@ -188,7 +188,7 @@ CMD ["node","server.js"]
 
 Use the [az acr build][az-acr-build] command to build and push an image to the registry, using the preceding Dockerfile. The `.` at the end of the command sets the location of the Dockerfile, in this case the current directory.
 
-```azurecli
+```
 az acr build --image webfrontend:v1 \
   --registry azure-workshop \
   --file Dockerfile .
@@ -198,7 +198,7 @@ az acr build --image webfrontend:v1 \
 
 Generate your Helm chart using the `helm create` command.
 
-```console
+```
 helm create webfrontend
 ```
 
@@ -247,7 +247,7 @@ helm install webfrontend webfrontend/
 
 It takes a few minutes for the service to return a public IP address. To monitor the progress, use the `kubectl get service` command with the *watch* parameter:
 
-```console
+```
 $ kubectl get service --watch
 
 NAME                TYPE          CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
@@ -262,6 +262,6 @@ Navigate to the load balancer of your application in a browser using the `<EXTER
 
 When the cluster is no longer needed, use the [az group delete][az-group-delete] command to remove the resource group, the AKS cluster, the container registry, the container images stored there, and all related resources.
 
-```azurecli-interactive
+```
 az group delete --name MyResourceGroup --yes --no-wait
 ```
