@@ -33,7 +33,7 @@ helm install nginx-ingress ingress-nginx/ingress-nginx \
      
 ```
 
-## Run the Application
+### Kubernetes parts
 
 Application is deployed by applying a YAML file to the cluster. The two deployments and each corresponding service are created using the YAML file below.
 
@@ -118,7 +118,7 @@ Run the frontend and backend in the namespace we created using kubectl apply
 
 ```kubectl apply -f calculator.yaml --namespace ingress-basic```
 
-## Create an Ingress Route
+### Create an Ingress Route
 
 Both the frontend and backend are now running on the Kubernetes Cluster. Now we create an ingress resource to configure the rules that route traffic to our website or API. This resource can be created with a similar method by vim `ingress.yaml`
 
@@ -148,10 +148,10 @@ spec:
 ```
 The most important part of this file is from line 15 ~ 22. We route the traffic from the root URL to our website service. Similarly, we route the traffic from `/api` to our API service.
 
-## Create the ingress resource
+### Create the ingress resource
 `kubectl apply -f ingress.yaml`
 
-## Try it!
+### Try it!
 
 The Kubernetes load balancer service is created for the NGINX ingress controller, we can access our app with the assigned dynamic public IP address.
 
