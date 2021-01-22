@@ -18,6 +18,7 @@ My very basic workshop about Azure
 ## Basic calculator app in azure
 
 ```bash
+az login
 az aks get-credentials --resource-group azure-workshop --name azure-workshop
 
 # Create a K8s namespace for the ingress resources
